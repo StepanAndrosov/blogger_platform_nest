@@ -6,14 +6,18 @@ import {
 import { Blog, BlogModelType } from '../domain/blog.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import {
+  Pagination,
   PaginationOutput,
-  PaginationWithSearchLoginAndEmailTerm,
 } from '../../../base/models/pagination.base.model';
 import { FilterQuery } from 'mongoose';
+import { PostsQueryRepository } from '../../posts/infrastructure/posts.query-repository';
 
 @Injectable()
 export class BlogsQueryRepository {
-  constructor(@InjectModel(Blog.name) private blogModel: BlogModelType) {}
+  constructor(
+    @InjectModel(Blog.name) private blogModel: BlogModelType,
+    private readonly postsQueryRepository: PostsQueryRepository,
+  ) {}
 
   async getById(id: string): Promise<BlogOutputModel | null> {
     const user = await this.blogModel.findOne({ _id: id });
@@ -26,21 +30,9 @@ export class BlogsQueryRepository {
   }
 
   async getAll(
-    pagination: PaginationWithSearchLoginAndEmailTerm,
+    pagination: Pagination,
   ): Promise<PaginationOutput<BlogOutputModel>> {
     const filters: FilterQuery<Blog>[] = [];
-
-    if (pagination.searchEmailTerm) {
-      filters.push({
-        email: { $regex: pagination.searchEmailTerm, $options: 'i' },
-      });
-    }
-
-    if (pagination.searchLoginTerm) {
-      filters.push({
-        login: { $regex: pagination.searchLoginTerm, $options: 'i' },
-      });
-    }
 
     const filter: FilterQuery<Blog> = {};
 
@@ -48,12 +40,26 @@ export class BlogsQueryRepository {
       filter.$or = filters;
     }
 
-    return await this.__getResult(filter, pagination);
+    return this.__getResult(filter, pagination);
+  }
+
+  async getPosts(blogId: string, pagination: Pagination) {
+    const filters: FilterQuery<Blog>[] = [];
+
+    const filter: FilterQuery<Blog> = {
+      blogId,
+    };
+
+    if (filters.length > 0) {
+      filter.$or = filters;
+    }
+
+    return this.postsQueryRepository.getByBlogId(filter, pagination);
   }
 
   private async __getResult(
     filter: FilterQuery<Blog>,
-    pagination: PaginationWithSearchLoginAndEmailTerm,
+    pagination: Pagination,
   ): Promise<PaginationOutput<BlogOutputModel>> {
     const users = await this.blogModel
       .find(filter)

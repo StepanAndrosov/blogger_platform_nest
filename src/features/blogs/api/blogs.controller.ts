@@ -15,9 +15,10 @@ import { BlogsQueryRepository } from '../infrastructure/blogs.query-repository';
 import { BlogsService } from '../application/blogs.service';
 import { BlogCreateModel } from './models/input/create-blog.input.model';
 import { BlogOutputModel } from './models/output/blog.output.model';
-import { PaginationWithSearchLoginAndEmailTerm } from '../../../base/models/pagination.base.model';
+import { Pagination } from '../../../base/models/pagination.base.model';
 import { SortingPropertiesType } from '../../../base/types/sorting-properties.type';
 import { BlogUpdateModel } from './models/input/update-blog.input.model';
+import { POSTS_SORTING_PROPERTIES } from '../../posts/api/posts.controller';
 
 export const BLOGS_SORTING_PROPERTIES: SortingPropertiesType<BlogOutputModel> =
   ['name', 'websiteUrl'];
@@ -36,11 +37,10 @@ export class BlogsController {
     // Для работы с query
     @Query() query: { [p: string]: string },
   ) {
-    const pagination: PaginationWithSearchLoginAndEmailTerm =
-      new PaginationWithSearchLoginAndEmailTerm(
-        query,
-        BLOGS_SORTING_PROPERTIES,
-      );
+    const pagination: Pagination = new Pagination(
+      query,
+      BLOGS_SORTING_PROPERTIES,
+    );
 
     return this.blogsQueryRepository.getAll(pagination);
   }
@@ -94,5 +94,18 @@ export class BlogsController {
     if (!deletingResult) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
+  }
+
+  @Get(':blogId/posts')
+  async getPosts(
+    @Param('blogId') blogId: string,
+    @Query() query: { [p: string]: string },
+  ) {
+    const pagination: Pagination = new Pagination(
+      query,
+      POSTS_SORTING_PROPERTIES,
+    );
+
+    return this.blogsQueryRepository.getPosts(blogId, pagination);
   }
 }
