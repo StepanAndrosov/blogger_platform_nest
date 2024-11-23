@@ -19,13 +19,14 @@ import { Pagination } from '../../../base/models/pagination.base.model';
 import { SortingPropertiesType } from '../../../base/types/sorting-properties.type';
 import { PostUpdateModel } from './models/input/update-post.input.model';
 import { BlogsQueryRepository } from '../../blogs/infrastructure/blogs.query-repository';
+import { COMMENTS_SORTING_PROPERTIES } from '../../comments/api/comments.controller';
 
 export const POSTS_SORTING_PROPERTIES: SortingPropertiesType<PostOutputModel> =
   ['createdAt', 'content', 'blogName', 'blogId'];
 
 // Tag для swagger
-@ApiTags('Blogs')
-@Controller('blogs')
+@ApiTags('Posts')
+@Controller('posts')
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
@@ -53,7 +54,7 @@ export class PostsController {
 
     const foundBlog = await this.blogsQueryRepository.getById(blogId);
     if (!foundBlog) {
-      throw new NotFoundException('blog not found');
+      throw new NotFoundException(`Blog with id ${blogId} not found`);
     }
 
     const createdBlogId = await this.postsService.create({
@@ -69,9 +70,22 @@ export class PostsController {
     const post = await this.postsQueryRepository.getById(id);
 
     if (!post) {
-      throw new NotFoundException('blog not found');
+      throw new NotFoundException(`Post with id ${id} not found`);
     }
     return post;
+  }
+
+  @Get(':postId/comments')
+  async getComments(
+    @Param('postId') postId: string,
+    @Query() query: { [p: string]: string },
+  ) {
+    const pagination: Pagination = new Pagination(
+      query,
+      COMMENTS_SORTING_PROPERTIES,
+    );
+
+    return this.postsQueryRepository.getComments(postId, pagination);
   }
 
   @Put(':id')
@@ -87,7 +101,7 @@ export class PostsController {
     });
 
     if (!isUpdated) {
-      throw new NotFoundException('blog not found');
+      throw new NotFoundException(`Post with id ${id} not found`);
     }
   }
 
@@ -98,7 +112,7 @@ export class PostsController {
     const deletingResult: boolean = await this.postsService.delete(id);
 
     if (!deletingResult) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`Post with id ${id} not found`);
     }
   }
 }

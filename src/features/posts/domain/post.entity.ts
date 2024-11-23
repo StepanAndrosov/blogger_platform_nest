@@ -14,9 +14,9 @@ export class NewLike {
 
 @Schema()
 class ExtendedLikesInfo {
-  @Prop({ type: String, require: true })
+  @Prop({ type: Number, require: true })
   likesCount: number;
-  @Prop({ type: String, require: true })
+  @Prop({ type: Number, require: true })
   dislikesCount: number;
   @Prop({ type: String, require: true })
   myStatus: StatusLike;

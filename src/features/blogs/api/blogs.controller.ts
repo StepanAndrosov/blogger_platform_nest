@@ -19,9 +19,12 @@ import { Pagination } from '../../../base/models/pagination.base.model';
 import { SortingPropertiesType } from '../../../base/types/sorting-properties.type';
 import { BlogUpdateModel } from './models/input/update-blog.input.model';
 import { POSTS_SORTING_PROPERTIES } from '../../posts/api/posts.controller';
+import { PostsQueryRepository } from '../../posts/infrastructure/posts.query-repository';
+import { PostsService } from '../../posts/application/posts.service';
+import { PostCreateModel } from './models/input/create-post.input.model';
 
 export const BLOGS_SORTING_PROPERTIES: SortingPropertiesType<BlogOutputModel> =
-  ['name', 'websiteUrl'];
+  ['name', 'websiteUrl', 'id', 'createdAt'];
 
 // Tag для swagger
 @ApiTags('Blogs')
@@ -30,6 +33,8 @@ export class BlogsController {
   constructor(
     private readonly blogsService: BlogsService,
     private readonly blogsQueryRepository: BlogsQueryRepository,
+    private readonly postsQueryRepository: PostsQueryRepository,
+    private readonly postsService: PostsService,
   ) {}
 
   @Get()
@@ -64,7 +69,7 @@ export class BlogsController {
     const blog = await this.blogsQueryRepository.getById(id);
 
     if (!blog) {
-      throw new NotFoundException('blog not found');
+      throw new NotFoundException(`Blog with id ${id} not found`);
     }
     return blog;
   }
@@ -81,7 +86,7 @@ export class BlogsController {
     });
 
     if (!isUpdated) {
-      throw new NotFoundException('blog not found');
+      throw new NotFoundException(`Blog with id ${id} not found`);
     }
   }
 
@@ -92,7 +97,7 @@ export class BlogsController {
     const deletingResult: boolean = await this.blogsService.delete(id);
 
     if (!deletingResult) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`Blog with id ${id} not found`);
     }
   }
 
@@ -107,5 +112,25 @@ export class BlogsController {
     );
 
     return this.blogsQueryRepository.getPosts(blogId, pagination);
+  }
+
+  @Post(':blogId/posts')
+  async createPosts(
+    @Param('blogId') blogId: string,
+    @Body() createModel: PostCreateModel,
+  ) {
+    const { title, content, shortDescription } = createModel;
+
+    const foundBlog = await this.blogsQueryRepository.getById(blogId);
+    if (!foundBlog) {
+      throw new NotFoundException(`Blog with id ${blogId} not found`);
+    }
+
+    const createdBlogId = await this.postsService.create({
+      createModel: { blogId, shortDescription, content, title },
+      blogName: foundBlog.name,
+    });
+
+    return this.postsQueryRepository.getById(createdBlogId);
   }
 }

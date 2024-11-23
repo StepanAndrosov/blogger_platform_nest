@@ -12,6 +12,19 @@ import { BlogsRepository } from './features/blogs/infrastructure/blogs.repositor
 import { BlogsService } from './features/blogs/application/blogs.service';
 import { BlogsQueryRepository } from './features/blogs/infrastructure/blogs.query-repository';
 import { Blog, BlogSchema } from './features/blogs/domain/blog.entity';
+import { Post, PostSchema } from './features/posts/domain/post.entity';
+import { PostsRepository } from './features/posts/infrastructure/posts.repository';
+import { PostsService } from './features/posts/application/posts.service';
+import { PostsQueryRepository } from './features/posts/infrastructure/posts.query-repository';
+import { PostsController } from './features/posts/api/posts.controller';
+import { CommentsController } from './features/comments/api/comments.controller';
+import { CommentsQueryRepository } from './features/comments/infrastructure/comments.query-repository';
+import { CommentsRepository } from './features/comments/infrastructure/comments.repository';
+import { CommentsService } from './features/comments/application/comments.service';
+import {
+  Comment,
+  CommentSchema,
+} from './features/comments/domain/comment.entity';
 
 const usersProviders: Provider[] = [
   UsersRepository,
@@ -23,6 +36,16 @@ const blogsProviders: Provider[] = [
   BlogsService,
   BlogsQueryRepository,
 ];
+const postsProviders: Provider[] = [
+  PostsRepository,
+  PostsService,
+  PostsQueryRepository,
+];
+const commentsProviders: Provider[] = [
+  CommentsRepository,
+  CommentsService,
+  CommentsQueryRepository,
+];
 
 @Module({
   // Регистрация модулей
@@ -30,11 +53,15 @@ const blogsProviders: Provider[] = [
     MongooseModule.forRoot(appSettings.api.MONGO_CONNECTION_URI),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Blog.name, schema: BlogSchema }]),
+    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    MongooseModule.forFeature([{ name: Comment.name, schema: CommentSchema }]),
   ],
   // Регистрация провайдеров
   providers: [
     ...usersProviders,
     ...blogsProviders,
+    ...postsProviders,
+    ...commentsProviders,
     AuthService,
     {
       provide: AppSettings,
@@ -42,6 +69,11 @@ const blogsProviders: Provider[] = [
     },
   ],
   // Регистрация контроллеров
-  controllers: [UsersController, BlogsController],
+  controllers: [
+    UsersController,
+    BlogsController,
+    PostsController,
+    CommentsController,
+  ],
 })
 export class AppModule {}

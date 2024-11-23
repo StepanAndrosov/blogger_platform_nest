@@ -10,10 +10,15 @@ import {
   PaginationOutput,
 } from '../../../base/models/pagination.base.model';
 import { FilterQuery } from 'mongoose';
+import { Blog } from '../../blogs/domain/blog.entity';
+import { CommentsQueryRepository } from '../../comments/infrastructure/comments.query-repository';
 
 @Injectable()
 export class PostsQueryRepository {
-  constructor(@InjectModel(Post.name) private postModel: PostModelType) {}
+  constructor(
+    @InjectModel(Post.name) private postModel: PostModelType,
+    private readonly commentsQueryRepository: CommentsQueryRepository,
+  ) {}
 
   async getById(id: string): Promise<PostOutputModel | null> {
     const post = await this.postModel.findOne({ _id: id });
@@ -39,11 +44,24 @@ export class PostsQueryRepository {
     return await this.__getResult(filter, pagination);
   }
 
+  async getComments(postId: string, pagination: Pagination) {
+    const filters: FilterQuery<Blog>[] = [];
+
+    const filter: FilterQuery<Blog> = {
+      postId,
+    };
+
+    if (filters.length > 0) {
+      filter.$or = filters;
+    }
+
+    return this.commentsQueryRepository.getByPostId(filter, pagination);
+  }
+
   async getByBlogId(
     filter: FilterQuery<Post>,
     pagination: Pagination,
   ): Promise<PaginationOutput<PostOutputModel>> {
-
     return await this.__getResult(filter, pagination);
   }
 
