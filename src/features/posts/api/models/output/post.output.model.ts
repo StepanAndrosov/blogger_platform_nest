@@ -30,7 +30,6 @@ export const PostOutputModelMapper = (post: PostDocument): PostOutputModel => {
   outputModel.blogId = post.blogId;
   outputModel.blogName = post.blogName;
   outputModel.createdAt = post.createdAt.toISOString();
-  outputModel.extendedLikesInfo.likesCount = post.extendedLikesInfo.likesCount;
   outputModel.extendedLikesInfo = post.extendedLikesInfo;
 
   return outputModel;

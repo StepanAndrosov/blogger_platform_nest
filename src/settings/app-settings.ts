@@ -53,7 +53,7 @@ class APISettings {
     // Application
     this.APP_PORT = this.getNumberOrDefault(envVariables.APP_PORT ?? '', 7840);
     this.HASH_ROUNDS = this.getNumberOrDefault(
-      envVariables.HASH_ROUNDS ?? '',
+      envVariables.HASH_ROUNDS ?? '10',
       10,
     );
 
