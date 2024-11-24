@@ -26,6 +26,7 @@ import {
   CommentSchema,
 } from './features/comments/domain/comment.entity';
 import { AppController } from './app.controller';
+import { TestingController } from './features/testing/testing.controller';
 
 const usersProviders: Provider[] = [
   UsersRepository,
@@ -71,6 +72,7 @@ const commentsProviders: Provider[] = [
   ],
   // Регистрация контроллеров
   controllers: [
+    TestingController,
     AppController,
     UsersController,
     BlogsController,
