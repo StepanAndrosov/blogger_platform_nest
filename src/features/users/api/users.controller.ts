@@ -1,4 +1,3 @@
-import { ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -10,15 +9,13 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { UsersQueryRepository } from '../infrastructure/users.query-repository';
+import { ApiTags } from '@nestjs/swagger';
+import { PaginationWithSearchLoginAndEmailTerm } from '../../../base/models/pagination.base.model';
+import { SortingPropertiesType } from '../../../base/types/sorting-properties.type';
 import { UsersService } from '../application/users.service';
+import { UsersQueryRepository } from '../infrastructure/users.query-repository';
 import { UserCreateModel } from './models/input/create-user.input.model';
 import { UserOutputModel } from './models/output/user.output.model';
-import {
-  PaginationOutput,
-  PaginationWithSearchLoginAndEmailTerm,
-} from '../../../base/models/pagination.base.model';
-import { SortingPropertiesType } from '../../../base/types/sorting-properties.type';
 
 export const USERS_SORTING_PROPERTIES: SortingPropertiesType<UserOutputModel> =
   ['login', 'email'];
@@ -30,7 +27,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly usersQueryRepository: UsersQueryRepository,
-  ) {}
+  ) { }
 
   @Get()
   async getAll(
@@ -44,6 +41,15 @@ export class UsersController {
       );
 
     return this.usersQueryRepository.getAll(pagination);
+  }
+
+  @Get(':id')
+  async getById(@Param('id') id: string): Promise<UserOutputModel | null> {
+
+    const user = this.usersQueryRepository.getById(id);
+
+    if (user) return user
+    else throw new NotFoundException(`User with id ${id} not found`);
   }
 
   @Post()

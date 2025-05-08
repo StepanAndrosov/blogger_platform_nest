@@ -30,7 +30,7 @@ export const applyAppSettings = (app: INestApplication) => {
   //app.use(LoggerMiddlewareFunc);
 
   // Установка префикса
-  setAppPrefix(app);
+  // setAppPrefix(app);
 
   // Конфигурация swagger документации
   setSwagger(app);
@@ -51,10 +51,11 @@ const setAppPrefix = (app: INestApplication) => {
 
 const setSwagger = (app: INestApplication) => {
   if (!appSettings.env.isProduction()) {
-    const swaggerPath = APP_PREFIX + '/swagger-doc';
+    const swaggerPath = APP_PREFIX + 'swagger-doc';
 
     const config = new DocumentBuilder()
       .setTitle('BLOGGER API')
+      .setDescription('The blogger API description')
       .addBearerAuth()
       .setVersion('1.0')
       .build();
