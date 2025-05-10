@@ -35,7 +35,7 @@ export class BlogsController {
     private readonly blogsQueryRepository: BlogsQueryRepository,
     private readonly postsQueryRepository: PostsQueryRepository,
     private readonly postsService: PostsService,
-  ) {}
+  ) { }
 
   @Get()
   async getAll(
@@ -111,7 +111,13 @@ export class BlogsController {
       POSTS_SORTING_PROPERTIES,
     );
 
-    return this.blogsQueryRepository.getPosts(blogId, pagination);
+    const posts = await this.blogsQueryRepository.getPosts(blogId, pagination);
+
+    if (!posts) {
+      throw new NotFoundException(`Posts with id ${blogId} not found`);
+    }
+
+    return posts;
   }
 
   @Post(':blogId/posts')
