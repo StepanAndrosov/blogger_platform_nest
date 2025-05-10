@@ -17,7 +17,7 @@ export class BlogsQueryRepository {
   constructor(
     @InjectModel(Blog.name) private blogModel: BlogModelType,
     private readonly postsQueryRepository: PostsQueryRepository,
-  ) {}
+  ) { }
 
   async getById(id: string): Promise<BlogOutputModel | null> {
     const user = await this.blogModel.findOne({ _id: id });
@@ -69,7 +69,9 @@ export class BlogsQueryRepository {
       .skip(pagination.getSkipItemsCount())
       .limit(pagination.pageSize);
 
-    const totalCount = await this.blogModel.countDocuments(filter);
+    const totalCount = await this.blogModel.countDocuments(
+      // filter
+    );
 
     const mappedBlogs = users.map(BlogOutputModelMapper);
 
