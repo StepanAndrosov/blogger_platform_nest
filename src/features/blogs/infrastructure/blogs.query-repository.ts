@@ -20,13 +20,13 @@ export class BlogsQueryRepository {
   ) { }
 
   async getById(id: string): Promise<BlogOutputModel | null> {
-    const user = await this.blogModel.findOne({ _id: id });
+    const blog = await this.blogModel.findOne({ _id: id });
 
-    if (user === null) {
+    if (blog === null) {
       return null;
     }
 
-    return BlogOutputModelMapper(user);
+    return BlogOutputModelMapper(blog);
   }
 
   async getAll(
@@ -72,8 +72,6 @@ export class BlogsQueryRepository {
     const totalCount = await this.blogModel.countDocuments(
       filter
     );
-
-    console.log(totalCount)
 
     const mappedBlogs = blogs.map(BlogOutputModelMapper);
 

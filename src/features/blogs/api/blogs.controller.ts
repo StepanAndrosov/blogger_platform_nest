@@ -113,7 +113,7 @@ export class BlogsController {
 
     const posts = await this.blogsQueryRepository.getPosts(blogId, pagination);
 
-    if (!posts) {
+    if (!posts.items.length) {
       throw new NotFoundException(`Posts with id ${blogId} not found`);
     }
 

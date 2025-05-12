@@ -6,7 +6,7 @@ import { PostUpdateModel } from '../api/models/input/update-post.input.model';
 
 @Injectable()
 export class PostsRepository {
-  constructor(@InjectModel(Post.name) private PostModel: PostModelType) {}
+  constructor(@InjectModel(Post.name) private PostModel: PostModelType) { }
 
   async create(newPost: Post): Promise<string> {
     const insertResult = await this.PostModel.insertMany([newPost]);
@@ -15,17 +15,12 @@ export class PostsRepository {
   }
 
   async update(id: string, updateData: PostUpdateModel) {
-    const foundPostModel = await this.PostModel.findOne({
-      _id: new Types.ObjectId(id),
-    });
+    const result = await this.PostModel.updateOne(
+      { _id: id },
+      { $set: updateData }
+    );
 
-    if (!foundPostModel) return false;
-
-    foundPostModel.updateOne(updateData);
-
-    await foundPostModel.save();
-
-    return true;
+    return result.modifiedCount > 0;
   }
 
   async delete(id: string): Promise<boolean> {

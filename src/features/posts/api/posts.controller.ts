@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -32,7 +33,7 @@ export class PostsController {
     private readonly postsService: PostsService,
     private readonly postsQueryRepository: PostsQueryRepository,
     private readonly blogsQueryRepository: BlogsQueryRepository,
-  ) {}
+  ) { }
 
   @Get()
   async getAll(
@@ -48,7 +49,7 @@ export class PostsController {
   }
 
   @Post()
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createModel: PostCreateModel) {
     const { title, content, shortDescription, blogId } = createModel;
 
@@ -89,7 +90,7 @@ export class PostsController {
   }
 
   @Put(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async update(@Param('id') id: string, @Body() updateModel: PostUpdateModel) {
     const { shortDescription, blogId, content, title } = updateModel;
 
@@ -107,7 +108,7 @@ export class PostsController {
 
   @Delete(':id')
   // Для переопределения default статус кода https://docs.nestjs.com/controllers#status-code
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
     const deletingResult: boolean = await this.postsService.delete(id);
 

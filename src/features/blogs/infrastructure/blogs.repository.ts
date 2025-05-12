@@ -6,7 +6,7 @@ import { BlogUpdateModel } from '../api/models/input/update-blog.input.model';
 
 @Injectable()
 export class BlogsRepository {
-  constructor(@InjectModel(Blog.name) private BlogModel: BlogModelType) {}
+  constructor(@InjectModel(Blog.name) private BlogModel: BlogModelType) { }
 
   async create(newBlog: Blog): Promise<string> {
     const insertResult = await this.BlogModel.insertMany([newBlog]);
@@ -15,17 +15,12 @@ export class BlogsRepository {
   }
 
   async update(id: string, updateData: BlogUpdateModel) {
-    const foundBlogModel = await this.BlogModel.findOne({
-      _id: new Types.ObjectId(id),
-    });
+    const result = await this.BlogModel.updateOne(
+      { _id: id },
+      { $set: updateData }
+    );
 
-    if (!foundBlogModel) return false;
-
-    foundBlogModel.updateOne(updateData);
-
-    await foundBlogModel.save();
-
-    return true;
+    return result.modifiedCount > 0;
   }
 
   async delete(id: string): Promise<boolean> {
