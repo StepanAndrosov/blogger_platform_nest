@@ -25,10 +25,15 @@ export class Pagination {
   public readonly searchNameTerm: string;
 
   constructor(query: ParsedQs, sortProperties: string[]) {
+    this.searchNameTerm = this.getSearchNameTerm(query.searchNameTerm);
     this.sortBy = this.getSortBy(query, sortProperties);
     this.sortDirection = this.getSortDirection(query);
     this.pageNumber = Number(query.pageNumber ?? 1);
     this.pageSize = Number(query.pageSize ?? 10);
+  }
+
+  public getSearchNameTerm(searchNameTerm: ParsedQs[string]): string {
+    return !!searchNameTerm ? String(searchNameTerm) : ''
   }
 
   public getSortDirectionInNumericFormat(): -1 | 1 {

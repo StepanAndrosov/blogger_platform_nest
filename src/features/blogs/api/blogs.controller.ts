@@ -1,4 +1,4 @@
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -39,11 +39,20 @@ export class BlogsController {
   ) { }
 
   @Get()
+  @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 5 })
+  @ApiQuery({ name: 'pageNumber', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'searchNameTerm', required: false, type: String, example: 'Tim' })
+  @ApiQuery({ name: 'sortDirection', required: false, enum: ['asc', 'desc'], example: 'asc' })
+  @ApiQuery({ name: 'sortBy', required: false, type: String, example: 'name' })
   async getAll(
-    @Query() query: { [p: string]: string },
+    @Query('pageSize') pageSize?: string,
+    @Query('pageNumber') pageNumber?: string,
+    @Query('searchNameTerm') searchNameTerm?: string,
+    @Query('sortDirection') sortDirection?: 'asc' | 'desc',
+    @Query('sortBy') sortBy?: string,
   ) {
     const pagination: Pagination = new Pagination(
-      query,
+      { pageSize, pageNumber, searchNameTerm, sortDirection, sortBy },
       BLOGS_SORTING_PROPERTIES,
     );
 

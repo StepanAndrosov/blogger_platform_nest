@@ -39,6 +39,12 @@ export class BlogsQueryRepository {
     if (filters.length > 0) {
       filter.$or = filters;
     }
+    console.log(pagination.searchNameTerm, filter)
+    if (!!pagination.searchNameTerm) {
+      const regex = new RegExp(pagination.searchNameTerm ?? '', 'i');
+      filter.name = regex
+    }
+    console.log(pagination.searchNameTerm, filter)
 
     return this.__getResult(filter, pagination);
   }
@@ -62,10 +68,9 @@ export class BlogsQueryRepository {
     pagination: Pagination,
   ): Promise<PaginationOutput<BlogOutputModel>> {
 
-    const regex = new RegExp(pagination.searchNameTerm, 'i'); // нечувствительно к регистру
 
     const blogs = await this.blogModel
-      .find({ name: regex, ...filter })
+      .find(filter)
       .sort({
         [pagination.sortBy]: pagination.getSortDirectionInNumericFormat(),
       })
