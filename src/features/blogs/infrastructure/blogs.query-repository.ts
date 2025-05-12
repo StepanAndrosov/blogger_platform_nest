@@ -61,7 +61,7 @@ export class BlogsQueryRepository {
     filter: FilterQuery<Blog>,
     pagination: Pagination,
   ): Promise<PaginationOutput<BlogOutputModel>> {
-    const users = await this.blogModel
+    const blogs = await this.blogModel
       .find(filter)
       .sort({
         [pagination.sortBy]: pagination.getSortDirectionInNumericFormat(),
@@ -70,10 +70,12 @@ export class BlogsQueryRepository {
       .limit(pagination.pageSize);
 
     const totalCount = await this.blogModel.countDocuments(
-      // filter
+      filter
     );
 
-    const mappedBlogs = users.map(BlogOutputModelMapper);
+    console.log(totalCount)
+
+    const mappedBlogs = blogs.map(BlogOutputModelMapper);
 
     return new PaginationOutput<BlogOutputModel>(
       mappedBlogs,

@@ -40,7 +40,6 @@ export class BlogsController {
 
   @Get()
   async getAll(
-    // Для работы с query
     @Query() query: { [p: string]: string },
   ) {
     const pagination: Pagination = new Pagination(
@@ -52,7 +51,7 @@ export class BlogsController {
   }
 
   @Post()
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createModel: BlogCreateModel) {
     const { name, websiteUrl, description } = createModel;
 
@@ -76,7 +75,7 @@ export class BlogsController {
   }
 
   @Put(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async update(@Param('id') id: string, @Body() updateModel: BlogUpdateModel) {
     const { name, websiteUrl, description } = updateModel;
 

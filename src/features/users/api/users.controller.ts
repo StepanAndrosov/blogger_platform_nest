@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -70,7 +71,7 @@ export class UsersController {
   // Если property не указать, то вернется объект @Param()
   @Delete(':id')
   // Для переопределения default статус кода https://docs.nestjs.com/controllers#status-code
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
     const deletingResult: boolean = await this.usersService.delete(id);
 
