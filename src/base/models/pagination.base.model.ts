@@ -22,6 +22,7 @@ export class Pagination {
   public readonly pageSize: number;
   public readonly sortDirection: SortDirectionType;
   public readonly sortBy: string;
+  public readonly searchNameTerm: string;
 
   constructor(query: ParsedQs, sortProperties: string[]) {
     this.sortBy = this.getSortBy(query, sortProperties);

@@ -61,7 +61,11 @@ export class BlogsQueryRepository {
     filter: FilterQuery<Blog>,
     pagination: Pagination,
   ): Promise<PaginationOutput<BlogOutputModel>> {
+
+    const regex = new RegExp(pagination.searchNameTerm, 'i'); // нечувствительно к регистру
+
     const blogs = await this.blogModel
+      .find({ name: regex })
       .find(filter)
       .sort({
         [pagination.sortBy]: pagination.getSortDirectionInNumericFormat(),
