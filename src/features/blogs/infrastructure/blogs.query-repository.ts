@@ -65,8 +65,7 @@ export class BlogsQueryRepository {
     const regex = new RegExp(pagination.searchNameTerm, 'i'); // нечувствительно к регистру
 
     const blogs = await this.blogModel
-      .find({ name: regex })
-      .find(filter)
+      .find({ name: regex, ...filter })
       .sort({
         [pagination.sortBy]: pagination.getSortDirectionInNumericFormat(),
       })
