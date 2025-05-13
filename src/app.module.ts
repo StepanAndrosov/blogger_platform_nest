@@ -27,6 +27,8 @@ import {
 } from './features/comments/domain/comment.entity';
 import { AppController } from './app.controller';
 import { TestingController } from './features/testing/testing.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const usersProviders: Provider[] = [
   UsersRepository,
@@ -52,6 +54,10 @@ const commentsProviders: Provider[] = [
 @Module({
   // Регистрация модулей
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'swagger-static'),
+      serveRoot: process.env.NODE_ENV === 'development' ? '/' : 'swagger-doc'
+    }),
     MongooseModule.forRoot(appSettings.api.MONGO_CONNECTION_URI),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Blog.name, schema: BlogSchema }]),
@@ -80,4 +86,4 @@ const commentsProviders: Provider[] = [
     CommentsController,
   ],
 })
-export class AppModule {}
+export class AppModule { }
