@@ -51,7 +51,7 @@ const setAppPrefix = (app: INestApplication) => {
 
 const setSwagger = (app: INestApplication) => {
   if (!appSettings.env.isProduction()) {
-    const swaggerPath = APP_PREFIX + 'swagger-doc';
+    const swaggerPath = 'swagger-doc';
 
     const config = new DocumentBuilder()
       .setTitle('BLOGGER API')
