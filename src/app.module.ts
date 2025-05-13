@@ -56,7 +56,7 @@ const commentsProviders: Provider[] = [
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'swagger-static'),
-      serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger-doc'
+      serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger'
     }),
     MongooseModule.forRoot(appSettings.api.MONGO_CONNECTION_URI),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
