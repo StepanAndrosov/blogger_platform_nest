@@ -1,4 +1,4 @@
-export class PostCreateModel {
+export class PostCreateFromBlogModel {
   title: string;
   content: string;
   shortDescription: string;

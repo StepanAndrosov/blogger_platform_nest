@@ -22,7 +22,7 @@ import { BlogUpdateModel } from './models/input/update-blog.input.model';
 import { POSTS_SORTING_PROPERTIES } from '../../posts/api/posts.controller';
 import { PostsQueryRepository } from '../../posts/infrastructure/posts.query-repository';
 import { PostsService } from '../../posts/application/posts.service';
-import { PostCreateModel } from './models/input/create-post.input.model';
+import { PostCreateFromBlogModel } from './models/input/create-post.input.model';
 
 export const BLOGS_SORTING_PROPERTIES: SortingPropertiesType<BlogOutputModel> =
   ['name', 'websiteUrl', 'id', 'createdAt'];
@@ -132,7 +132,7 @@ export class BlogsController {
   @Post(':blogId/posts')
   async createPosts(
     @Param('blogId') blogId: string,
-    @Body() createModel: PostCreateModel,
+    @Body() createModel: PostCreateFromBlogModel,
   ) {
     const { title, content, shortDescription } = createModel;
 

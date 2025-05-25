@@ -11,7 +11,7 @@ window.onload = function() {
   "swaggerDoc": {
     "openapi": "3.0.0",
     "paths": {
-      "/testing/all-data": {
+      "/api/testing/all-data": {
         "delete": {
           "operationId": "TestingController_deleteAll",
           "parameters": [],
@@ -25,7 +25,7 @@ window.onload = function() {
           ]
         }
       },
-      "/": {
+      "/api": {
         "get": {
           "operationId": "AppController_getHello",
           "parameters": [],
@@ -46,7 +46,7 @@ window.onload = function() {
           ]
         }
       },
-      "/users": {
+      "/api/users": {
         "get": {
           "operationId": "UsersController_getAll",
           "parameters": [],
@@ -89,7 +89,7 @@ window.onload = function() {
           ]
         }
       },
-      "/users/{id}": {
+      "/api/users/{id}": {
         "get": {
           "operationId": "UsersController_getById",
           "parameters": [
@@ -140,7 +140,7 @@ window.onload = function() {
           ]
         }
       },
-      "/blogs": {
+      "/api/blogs": {
         "get": {
           "operationId": "BlogsController_getAll",
           "parameters": [
@@ -232,7 +232,7 @@ window.onload = function() {
           ]
         }
       },
-      "/blogs/{id}": {
+      "/api/blogs/{id}": {
         "get": {
           "operationId": "BlogsController_getById",
           "parameters": [
@@ -314,7 +314,7 @@ window.onload = function() {
           ]
         }
       },
-      "/blogs/{blogId}/posts": {
+      "/api/blogs/{blogId}/posts": {
         "get": {
           "operationId": "BlogsController_getPosts",
           "parameters": [
@@ -353,7 +353,7 @@ window.onload = function() {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostCreateModel"
+                  "$ref": "#/components/schemas/PostCreateFromBlogModel"
                 }
               }
             }
@@ -375,7 +375,7 @@ window.onload = function() {
           ]
         }
       },
-      "/posts": {
+      "/api/posts": {
         "get": {
           "operationId": "PostsController_getAll",
           "parameters": [],
@@ -418,7 +418,7 @@ window.onload = function() {
           ]
         }
       },
-      "/posts/{id}": {
+      "/api/posts/{id}": {
         "get": {
           "operationId": "PostsController_getById",
           "parameters": [
@@ -500,7 +500,7 @@ window.onload = function() {
           ]
         }
       },
-      "/posts/{postId}/comments": {
+      "/api/posts/{postId}/comments": {
         "get": {
           "operationId": "PostsController_getComments",
           "parameters": [
@@ -523,7 +523,7 @@ window.onload = function() {
           ]
         }
       },
-      "/comments/{id}": {
+      "/api/comments/{id}": {
         "get": {
           "operationId": "CommentsController_getById",
           "parameters": [
@@ -568,6 +568,10 @@ window.onload = function() {
           "scheme": "bearer",
           "bearerFormat": "JWT",
           "type": "http"
+        },
+        "basicAuth": {
+          "type": "http",
+          "scheme": "basic"
         }
       },
       "schemas": {
@@ -657,6 +661,25 @@ window.onload = function() {
             "name",
             "description",
             "websiteUrl"
+          ]
+        },
+        "PostCreateFromBlogModel": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "shortDescription": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "content",
+            "shortDescription"
           ]
         },
         "PostCreateModel": {
