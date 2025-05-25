@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { createWriteStream } from 'fs';
 import { get } from 'http';
 import { AppModule } from './app.module';
-import { appSettings } from './settings/app-settings';
-import { applyAppSettings } from './settings/apply-app-setting';
+import { appSettings } from './setup/app-settings';
+import { applyAppSettings } from './setup/apply-app-setting';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

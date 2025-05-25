@@ -1,10 +1,10 @@
-import {Injectable} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import bcrypt from "bcrypt";
-import {AppSettings} from "../../../settings/app-settings";
+import { AppSettings } from "../../../setup/app-settings";
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly appSettings: AppSettings) {}
+    constructor(private readonly appSettings: AppSettings) { }
     async generatePasswordHash(password: string): Promise<string> {
         return await bcrypt.hash(password, this.appSettings.api.HASH_ROUNDS)
     }

@@ -1,6 +1,6 @@
 import { Module, Provider } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppSettings, appSettings } from './settings/app-settings';
+import { AppSettings, appSettings } from './setup/app-settings';
 import { UsersRepository } from './modules/users/infrastructure/users.repository';
 import { UsersService } from './modules/users/application/users.service';
 import { UsersQueryRepository } from './modules/users/infrastructure/users.query-repository';
