@@ -1,32 +1,32 @@
 import { Module, Provider } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppSettings, appSettings } from './settings/app-settings';
-import { UsersRepository } from './features/users/infrastructure/users.repository';
-import { UsersService } from './features/users/application/users.service';
-import { UsersQueryRepository } from './features/users/infrastructure/users.query-repository';
-import { User, UserSchema } from './features/users/domain/user.entity';
-import { UsersController } from './features/users/api/users.controller';
-import { AuthService } from './features/auth/application/auth.service';
-import { BlogsController } from './features/blogs/api/blogs.controller';
-import { BlogsRepository } from './features/blogs/infrastructure/blogs.repository';
-import { BlogsService } from './features/blogs/application/blogs.service';
-import { BlogsQueryRepository } from './features/blogs/infrastructure/blogs.query-repository';
-import { Blog, BlogSchema } from './features/blogs/domain/blog.entity';
-import { Post, PostSchema } from './features/posts/domain/post.entity';
-import { PostsRepository } from './features/posts/infrastructure/posts.repository';
-import { PostsService } from './features/posts/application/posts.service';
-import { PostsQueryRepository } from './features/posts/infrastructure/posts.query-repository';
-import { PostsController } from './features/posts/api/posts.controller';
-import { CommentsController } from './features/comments/api/comments.controller';
-import { CommentsQueryRepository } from './features/comments/infrastructure/comments.query-repository';
-import { CommentsRepository } from './features/comments/infrastructure/comments.repository';
-import { CommentsService } from './features/comments/application/comments.service';
+import { UsersRepository } from './modules/users/infrastructure/users.repository';
+import { UsersService } from './modules/users/application/users.service';
+import { UsersQueryRepository } from './modules/users/infrastructure/users.query-repository';
+import { User, UserSchema } from './modules/users/domain/user.entity';
+import { UsersController } from './modules/users/api/users.controller';
+import { AuthService } from './modules/auth/application/auth.service';
+import { BlogsController } from './modules/blogs/api/blogs.controller';
+import { BlogsRepository } from './modules/blogs/infrastructure/blogs.repository';
+import { BlogsService } from './modules/blogs/application/blogs.service';
+import { BlogsQueryRepository } from './modules/blogs/infrastructure/blogs.query-repository';
+import { Blog, BlogSchema } from './modules/blogs/domain/blog.entity';
+import { Post, PostSchema } from './modules/posts/domain/post.entity';
+import { PostsRepository } from './modules/posts/infrastructure/posts.repository';
+import { PostsService } from './modules/posts/application/posts.service';
+import { PostsQueryRepository } from './modules/posts/infrastructure/posts.query-repository';
+import { PostsController } from './modules/posts/api/posts.controller';
+import { CommentsController } from './modules/comments/api/comments.controller';
+import { CommentsQueryRepository } from './modules/comments/infrastructure/comments.query-repository';
+import { CommentsRepository } from './modules/comments/infrastructure/comments.repository';
+import { CommentsService } from './modules/comments/application/comments.service';
 import {
   Comment,
   CommentSchema,
-} from './features/comments/domain/comment.entity';
+} from './modules/comments/domain/comment.entity';
 import { AppController } from './app.controller';
-import { TestingController } from './features/testing/testing.controller';
+import { TestingController } from './modules/testing/testing.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 

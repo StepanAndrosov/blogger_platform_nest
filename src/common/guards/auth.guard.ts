@@ -1,13 +1,13 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
-import { UsersService } from '../../features/users/application/users.service';
+import { UsersService } from '../../modules/users/application/users.service';
 
 // Custom guard
 // https://docs.nestjs.com/guards
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   canActivate(
     context: ExecutionContext,
